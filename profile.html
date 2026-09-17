@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Connect</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <h2>Connect</h2>
+
+        <div>
+            <a href="index.html">Home</a>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <main class="container profile-container">
+
+        <section class="profile-card">
+
+            <div class="profile-cover"></div>
+
+            <div class="profile-content">
+
+                <div class="profile-avatar">👤</div>
+
+                <h1 id="userName">User</h1>
+
+                <p id="userEmail" class="profile-email"></p>
+
+                <p class="profile-bio">
+                    ✨ Welcome to my Connect profile!
+                </p>
+
+                <div class="profile-stats">
+
+                    <div>
+                        <strong id="followersCount">0</strong>
+                        <span>Followers</span>
+                    </div>
+
+                    <div>
+                        <strong id="followingCount">0</strong>
+                        <span>Following</span>
+                    </div>
+
+                    <div>
+                        <strong>✨</strong>
+                        <span>Connect</span>
+                    </div>
+
+                </div>
+
+                <div class="profile-buttons">
+
+                    <button onclick="followUser()">
+                        + Follow User
+                    </button>
+
+                    <button class="profile-logout"
+                        onclick="logout()">
+                        Logout
+                    </button>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            window.location.href = "login.html";
+        } else {
+            loadProfile();
+        }
+
+        // Load logged-in user's profile
+        async function loadProfile() {
+            try {
+                const response = await fetch(
+                    "http://localhost:5001/api/users/me",
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const user = await response.json();
+
+                if (!response.ok) {
+                    alert(user.message || "Unable to load profile");
+                    return;
+                }
+
+                document.getElementById("userName").textContent =
+                    user.name;
+
+                document.getElementById("userEmail").textContent =
+                    user.email;
+
+                document.getElementById("followersCount").textContent =
+                    user.followersCount;
+
+                document.getElementById("followingCount").textContent =
+                    user.followingCount;
+
+            } catch (error) {
+                console.error(error);
+                alert("Server connection failed");
+            }
+        }
+
+        // Follow / Unfollow
+        async function followUser() {
+            if (!token) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const userId = prompt(
+                "Enter the user ID you want to follow:"
+            );
+
+            if (!userId) return;
+
+            try {
+                const response = await fetch(
+                    `https://social-media-platform-vjcv.onrender.com/api`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                alert(data.message);
+
+                // Refresh counts after following/unfollowing
+                if (response.ok) {
+                    loadProfile();
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("Server connection failed");
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+
+            window.location.href = "login.html";
+        }
+    </script>
+
+</body>
+</html>

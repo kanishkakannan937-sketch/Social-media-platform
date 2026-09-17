@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect - Social Media</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <h2>Connect</h2>
+
+        <div>
+            <a href="index.html">Home</a>
+            <a href="profile.html">Profile</a>
+            <a href="login.html" id="loginLink">Login</a>
+            <button id="logoutBtn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <section class="create-post">
+            <h2>Create a Post</h2>
+
+            <textarea
+                id="postContent"
+                placeholder="What's on your mind?"
+            ></textarea>
+
+            <input
+                type="text"
+                id="postImage"
+                placeholder="Image URL (optional)"
+            >
+
+            <button onclick="createPost()">Post</button>
+        </section>
+
+        <section>
+            <h2>Latest Posts</h2>
+            <div id="postsContainer"></div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+
+</body>
+</html>

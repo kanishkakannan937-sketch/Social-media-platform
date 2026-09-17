@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register - Connect</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+            <h1>Join Connect</h1>
+            <p>Create your account</p>
+
+            <form id="registerForm">
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Full Name"
+                    required
+                >
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email"
+                    required
+                >
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    minlength="6"
+                    required
+                >
+
+                <button type="submit">Create Account</button>
+
+            </form>
+
+            <p>
+                Already have an account?
+                <a href="login.html">Login</a>
+            </p>
+
+            <p id="message"></p>
+
+        </div>
+
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:5001/api";
+
+        document
+            .getElementById("registerForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+                const name = document.getElementById("name").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("password").value;
+
+                const message = document.getElementById("message");
+
+                try {
+
+                    const response = await fetch(
+                        `${API_URL}/users/register`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                name,
+                                email,
+                                password
+                            })
+                        }
+                    );
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        message.textContent =
+                            data.message || "Registration failed";
+                        return;
+                    }
+
+                    message.textContent =
+                        "Registration successful! Redirecting...";
+
+                    setTimeout(() => {
+                        window.location.href = "login.html";
+                    }, 1000);
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    message.textContent =
+                        "Unable to connect to server";
+                }
+            });
+    </script>
+
+</body>
+</html>
