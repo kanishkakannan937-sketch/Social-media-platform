@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5001/api";
+const API = "https://social-media-platform-vjcv.onrender.com/api";
 
 const token = localStorage.getItem("token");
 
@@ -24,7 +24,7 @@ async function createPost() {
     }
 
     try {
-        const response = await fetch(`${API_URL}/posts`, {
+        const response = await fetch(`${API}/posts`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -61,7 +61,7 @@ async function loadPosts() {
     if (!container) return;
 
     try {
-        const response = await fetch(`${API_URL}/posts`);
+        const response = await fetch(`${API}/posts`);
         const posts = await response.json();
 
         container.innerHTML = "";
@@ -137,7 +137,7 @@ async function likePost(postId) {
 
     try {
         const response = await fetch(
-            `${API_URL}/posts/${postId}/like`,
+            `${API}/posts/${postId}/like`,
             {
                 method: "PUT",
                 headers: {
@@ -177,7 +177,7 @@ async function addComment(postId) {
 
     try {
         const response = await fetch(
-            `${API_URL}/posts/${postId}/comment`,
+            `${API}/posts/${postId}/comment`,
             {
                 method: "POST",
                 headers: {
